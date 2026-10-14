@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <h1>Results — {{ subject }}</h1>
+  <div class="score-banner">
+    <span class="score-num">{{ correct_count }}/{{ total }}</span>
+    <span class="score-pct">{{ "%.0f"|format(correct_count/total*100) }}% correct</span>
+  </div>
+
+  {% for r in results %}
+    <div class="question-card {{ 'correct' if r.is_correct else 'incorrect' }}">
+      <div class="q-topic">{{ r.topic }}</div>
+      <div class="q-text">{{ r.question }}</div>
+      <div class="options">
+        {% for letter, text in r.options.items() %}
+          <div class="option-review
+            {{ 'is-correct-answer' if letter == r.correct_answer }}
+            {{ 'is-wrong-selected' if letter == r.selected and not r.is_correct }}">
+            <span class="option-letter">{{ letter }}</span> {{ text }}
+            {% if letter == r.correct_answer %}<span class="tag-correct">✓ correct answer</span>{% endif %}
+            {% if letter == r.selected and not r.is_correct %}<span class="tag-wrong">✗ your answer</span>{% endif %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="explanation"><strong>Why:</strong> {{ r.explanation }}</div>
+    </div>
+  {% endfor %}
+
+  <div class="result-actions">
+    <a href="{{ url_for('index') }}" class="btn-secondary">← Practice another subject</a>
+    <a href="{{ url_for('progress', email=email) }}" class="btn-primary small">See my topic breakdown →</a>
+  </div>
+</section>
+{% endblock %}

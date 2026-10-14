@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <h1>My progress</h1>
+  <p class="sub">Your accuracy by topic, across every practice set you've taken — worst first, so you know exactly what to revise.</p>
+
+  <form method="GET" action="{{ url_for('progress') }}" class="form inline-form">
+    <input type="email" name="email" required placeholder="you@email.com" value="{{ email }}">
+    <button type="submit" class="btn-primary small">View progress</button>
+  </form>
+
+  {% if topics is not none %}
+    {% if topics %}
+      <div class="stats-summary">
+        <div class="stat-card"><div class="label">Total questions answered</div><div class="value">{{ total_attempts }}</div></div>
+      </div>
+
+      <div class="topic-list">
+        {% for t in topics %}
+        <div class="topic-row">
+          <div class="topic-info">
+            <strong>{{ t.topic }}</strong>
+            <span class="subject-tag">{{ t.subject }}</span>
+          </div>
+          <div class="topic-bar-wrap">
+            <div class="topic-bar" style="width: {{ t.accuracy }}%; background: {{ '#3FAE6B' if t.accuracy >= 70 else ('#D9A03F' if t.accuracy >= 40 else '#D9574B') }};"></div>
+          </div>
+          <div class="topic-score">{{ t.correct }}/{{ t.total }} ({{ "%.0f"|format(t.accuracy) }}%)</div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty-note">No practice attempts logged for this email yet. <a href="{{ url_for('index') }}">Start a practice set</a> first.</p>
+    {% endif %}
+  {% endif %}
+</section>
+{% endblock %}

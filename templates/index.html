@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel narrow">
+  <h1>Start a practice set</h1>
+  <p class="sub">Pick a subject — you'll get a few random questions, then see exactly which topics you need to revise.</p>
+
+  <form method="POST" action="{{ url_for('start_quiz') }}" class="form">
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" required placeholder="you@email.com">
+    <p class="hint">Used to track your own progress over time — never shown to anyone else.</p>
+
+    <label for="subject">Subject</label>
+    <select id="subject" name="subject" required>
+      <option value="" disabled selected>Select subject</option>
+      {% for s in subjects %}<option value="{{ s }}">{{ s }} ({{ counts[s] }} questions available)</option>{% endfor %}
+    </select>
+
+    <button type="submit" class="btn-primary">Start practicing</button>
+  </form>
+</section>
+{% endblock %}

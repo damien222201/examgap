@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <h1>{{ subject }} practice</h1>
+  <p class="sub">{{ quiz|length }} questions — answer them all, then submit.</p>
+
+  <form method="POST" action="{{ url_for('submit_quiz') }}" class="form">
+    <input type="hidden" name="email" value="{{ email }}">
+    <input type="hidden" name="subject" value="{{ subject }}">
+
+    {% for q in quiz %}
+    <div class="question-card">
+      <div class="q-topic">{{ q.topic }}</div>
+      <div class="q-text">{{ loop.index }}. {{ q.question }}</div>
+      <div class="options">
+        {% for letter, text in q.options.items() %}
+        <label class="option-label">
+          <input type="radio" name="answer_{{ q.id }}" value="{{ letter }}" required>
+          <span class="option-letter">{{ letter }}</span> {{ text }}
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+
+    <button type="submit" class="btn-primary">Submit answers</button>
+  </form>
+</section>
+{% endblock %}
